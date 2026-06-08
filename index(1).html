@@ -327,9 +327,13 @@ const SK='portfolio_v3';
 
 // Mapping tickers Yahoo Finance (corrections connues)
 const TICKER_MAP = {
-  'TEM.US': 'TEM',
-  'MSTR': 'MSTR',
-  'GLXY': 'GLXY.TO',  // Galaxy Digital - Toronto Stock Exchange (converti CAD->USD auto)
+  'TEM.US': 'TEM',        // Tempus AI — ticker Yahoo sans .US
+  'GLXY': 'GLXY.TO',      // Galaxy Digital — Toronto, converti CAD->USD auto
+  'CRWV': 'CRWV',         // CoreWeave — IPO 2025, ticker standard
+  'NOW': 'NOW',           // ServiceNow — ticker standard
+  'AMBA': 'AMBA',         // Ambarella — ticker standard
+  'ALGM': 'ALGM',         // Allegro MicroSystems — ticker standard
+  'OKLO': 'OKLO',         // Oklo — ticker standard
 };
 
 const INIT_DATA = {"total":29198,"ncid":9,"nid":32,"cats":[{"id":1,"name":"Robotique humanoïde, voitures autonomes & batteries","tgt":20},{"id":2,"name":"Spatial & connectivité orbitale","tgt":15},{"id":3,"name":"Actions reliées aux cryptos","tgt":25},{"id":4,"name":"Métaux & ressources stratégiques","tgt":10},{"id":5,"name":"Énergie nucléaire & SMR","tgt":10},{"id":6,"name":"Intelligence artificielle & cloud","tgt":14},{"id":7,"name":"Technologies quantique","tgt":3},{"id":8,"name":"Medecine IA","tgt":3}],"assets":[{"id":1,"cid":1,"n":"ARK Autonomus Tech & Robotics ETF","t":"ARKQ","narr":"Robots & Tech ETF","qty":10.7822,"bp":134.48,"cp":138.4,"note":""},{"id":2,"cid":1,"n":"Tesla","t":"TSLA","narr":"Voitures autonomes","qty":4.7,"bp":265.5,"cp":419.23,"note":""},{"id":3,"cid":1,"n":"Xpeng","t":"XPEV","narr":"Robotique humanoïde","qty":51.384,"bp":19.4597,"cp":17.53,"note":""},{"id":4,"cid":6,"n":"Eos Energy Enterprises","t":"EOSE","narr":"Stockage énergie IA","qty":82.893,"bp":8.454,"cp":8.38,"note":"Achat 11 et 26 mai 2026"},{"id":5,"cid":2,"n":"Redwire","t":"RDW","narr":"Infrastructure spatiale","qty":66.763,"bp":9.7359,"cp":18.64,"note":""},{"id":6,"cid":2,"n":"Intuitive Machines","t":"LUNR","narr":"Infrastructure lunaire","qty":20.9,"bp":23.91,"cp":34.02,"note":""},{"id":7,"cid":3,"n":"Amplify Blockchain Technology ETF","t":"BLOK","narr":"ETF mineur infra crypto (blockchain)","qty":9.697,"bp":67.02,"cp":66.16,"note":""},{"id":8,"cid":3,"n":"Coinbase","t":"COIN","narr":"Exchange crypto USA","qty":5.71673,"bp":192.4,"cp":165.3,"note":""},{"id":9,"cid":3,"n":"Robinhood","t":"HOOD","narr":"Courtier actions/cryptos","qty":12.915,"bp":81.299,"cp":83.83,"note":""},{"id":10,"cid":3,"n":"Galaxy Digital","t":"GLXY","narr":"Data center & crypto","qty":29.782,"bp":26.86,"cp":29.7,"note":""},{"id":11,"cid":4,"n":"VanEck Rare Earth ETF","t":"REMX","narr":"Terres rares ETF","qty":7.74,"bp":96.8,"cp":98.31,"note":"Achat 27 mai 2026"},{"id":12,"cid":4,"n":"Copper miners ETF","t":"COPX","narr":"Minières de cuivre","qty":11.51,"bp":86.45,"cp":90.49,"note":""},{"id":17,"cid":5,"n":"Global X Uranium ETF","t":"URA","narr":"Leaders uranium & SMR","qty":27.514,"bp":52.698,"cp":50.45,"note":""},{"id":18,"cid":5,"n":"Energy Fuels Inc.","t":"UUUU","narr":"Uranium & terres rares","qty":50.09,"bp":19.92,"cp":18.14,"note":""},{"id":19,"cid":5,"n":"NuScale Power","t":"SMR","narr":"Small Modular Reactor","qty":90.04,"bp":14.8,"cp":12.28,"note":""},{"id":20,"cid":6,"n":"CoreWeave","t":"CRWV","narr":"Cloud IA spécialisé","qty":4.976,"bp":100.47,"cp":109.75,"note":""},{"id":21,"cid":6,"n":"ServiceNow","t":"NOW","narr":"Agents IA entreprise","qty":7.85,"bp":101.86,"cp":116.29,"note":""},{"id":22,"cid":1,"n":"Ambarella Inc","t":"AMBA","narr":"Capteur/cerveau vision robot et drone","qty":6.41,"bp":78,"cp":72.22,"note":""},{"id":23,"cid":1,"n":"Allegro MicroSystems, Inc","t":"ALGM","narr":"Capteur magnétique voitures,robots et data center","qty":9.545,"bp":52.38,"cp":52.44,"note":""},{"id":24,"cid":5,"n":"Oklo Inc","t":"OKLO","narr":"développement de réacteurs à fission / centrale nucleaire","qty":15.02,"bp":83.19,"cp":65.52,"note":""},{"id":25,"cid":1,"n":"Ses Ai Corp","t":"SES","narr":"batterie/drone/IA / stokage","qty":843.9,"bp":1.457,"cp":1.32,"note":""},{"id":26,"cid":3,"n":"Stratégy Inc","t":"MSTR","narr":"BTC","qty":6.965,"bp":49.87,"cp":126,"note":""},{"id":27,"cid":7,"n":"International Business Machines Corporation","t":"IBM","narr":"Informatique quantique, financement USA","qty":1.795,"bp":278.51,"cp":298,"note":""},{"id":28,"cid":1,"n":"Archer Aviation Inc","t":"ACHR","narr":"voiture volante/IA","qty":121.5,"bp":7.818,"cp":6.53,"note":""},{"id":29,"cid":2,"n":"ARK Space & Innovation ETF","t":"ARKX","narr":"innovation spatial/orbital","qty":18.5,"bp":35.127,"cp":35.84,"note":""},{"id":30,"cid":8,"n":"Tempus Ai Inc","t":"TEM.US","narr":"IA medecine","qty":12.426,"bp":60.35,"cp":47.1,"note":""},{"id":31,"cid":8,"n":"CRISPR Therapeutics AG","t":"CRSP","narr":"IA medecine genetique","qty":7.287,"bp":54.89,"cp":52.08,"note":""}]};
@@ -359,22 +363,33 @@ function toast(msg,ms=2800){
 }
 
 // ─── ACTUALISATION AUTOMATIQUE DES PRIX ───────────────────────────────────────
-// Plusieurs proxies en fallback pour maximiser la fiabilité
-const PROXIES = [
-  t => `https://corsproxy.io/?${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+t+'?interval=1d&range=1d')}`,
-  t => `https://api.allorigins.win/raw?url=${encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/'+t+'?interval=1d&range=1d')}`,
-  t => `https://thingproxy.freeboard.io/fetch/https://query1.finance.yahoo.com/v8/finance/chart/${t}?interval=1d&range=1d`,
-];
+// Proxies en cascade — si l'un échoue, on passe au suivant
+function makeProxyUrls(yTicker){
+  const encoded = encodeURIComponent(yTicker);
+  const base1 = `https://query1.finance.yahoo.com/v8/finance/chart/${encoded}?interval=1d&range=1d`;
+  const base2 = `https://query2.finance.yahoo.com/v8/finance/chart/${encoded}?interval=1d&range=1d`;
+  return [
+    `https://corsproxy.io/?${encodeURIComponent(base1)}`,
+    `https://corsproxy.io/?${encodeURIComponent(base2)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(base1)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(base2)}`,
+    `https://corsproxy.io/?${encodeURIComponent('https://query1.finance.yahoo.com/v7/finance/quote?symbols='+encoded)}`,
+  ];
+}
 
 async function fetchWithProxy(yTicker){
-  for(const proxyFn of PROXIES){
+  const urls = makeProxyUrls(yTicker);
+  for(const url of urls){
     try{
-      const url = proxyFn(encodeURIComponent(yTicker));
-      const res = await fetch(url, {signal: AbortSignal.timeout(9000)});
+      const res = await fetch(url, {signal: AbortSignal.timeout(10000)});
       if(!res.ok) continue;
       const data = await res.json();
-      const price = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if(price && !isNaN(price)) return Math.round(price*100)/100;
+      // v8/finance/chart format
+      const p1 = data?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if(p1 && !isNaN(p1)) return Math.round(p1*100)/100;
+      // v7/finance/quote format
+      const p2 = data?.quoteResponse?.result?.[0]?.regularMarketPrice;
+      if(p2 && !isNaN(p2)) return Math.round(p2*100)/100;
     }catch(e){ continue; }
   }
   return null;
@@ -384,10 +399,11 @@ async function fetchPrice(ticker){
   const yTicker = TICKER_MAP[ticker] || ticker;
   const price = await fetchWithProxy(yTicker);
   if(price === null) return null;
-  // Conversion CAD->USD pour les tickers Toronto
+  // Conversion CAD->USD pour les tickers Toronto (.TO)
   if(yTicker.endsWith('.TO')){
     const rate = await fetchWithProxy('CADUSD=X');
     if(rate) return Math.round(price * rate * 100)/100;
+    return price; // retourne en CAD si conversion échoue
   }
   return price;
 }
