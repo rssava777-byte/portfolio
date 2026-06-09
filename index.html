@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Mon Portefeuille</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f7f4;--bg2:#f0efe9;--bg3:#e8e6df;--card:#fff;--text:#1a1a1a;--text2:#6b6b6b;--text3:#a8a89e;--border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);--cat-bg:#1e3a5f;--cat-text:#b8cfe8;--cat-border:#2a4f80;--cat-pct:#8aafda;--accent:#1e3a5f;--accent-txt:#e8f0fb;--pos-bg:#d1fae5;--pos-txt:#065f46;--neg-bg:#fee2e2;--neg-txt:#991b1b;--radius:10px;--rsm:6px}
+@media(prefers-color-scheme:dark){:root{--bg:#141414;--bg2:#1c1c1c;--bg3:#242424;--card:#1c1c1c;--text:#f0f0f0;--text2:#a0a0a0;--text3:#555;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--cat-bg:#1a2f4a;--cat-text:#93b8d8;--cat-border:#1e3a5f;--cat-pct:#7aa3cc;--accent:#2d5f9e;--accent-txt:#e8f0fb;--pos-bg:#064e3b;--pos-txt:#6ee7b7;--neg-bg:#7f1d1d;--neg-txt:#fca5a5}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:1280px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:0.5px solid var(--border)}
+.header-left h1{font-size:18px;font-weight:500;letter-spacing:-.02em}
+.header-left p{font-size:11px;color:var(--text2);margin-top:3px;display:flex;align-items:center;gap:5px}
+.sdot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;transition:background .3s}
+.sdot.saving{background:#f59e0b}
+.hright{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.banner{border-radius:var(--radius);padding:12px 16px;margin-bottom:1.25rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.banner.blue{background:linear-gradient(135deg,#1e3a5f,#2d5f9e);color:#e8f0fb}
+.banner.green{background:linear-gradient(135deg,#064e3b,#065f46);color:#d1fae5}
+.banner .bt{flex:1;min-width:180px}
+.banner .bt-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.banner .bt-sub{font-size:11px;opacity:.75}
+.banner .bbtns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px 12px;border-radius:var(--rsm);border:0.5px solid var(--border2);background:var(--card);color:var(--text);cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+.btn:hover{background:var(--bg2)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.prim{background:var(--accent);color:var(--accent-txt);border-color:transparent}
+.btn.prim:hover{opacity:.9}
+.btn.wh{background:rgba(255,255,255,.15);color:inherit;border-color:rgba(255,255,255,.3)}
+.btn.wh:hover{background:rgba(255,255,255,.25)}
+.bicon{padding:5px 6px;border:none;background:transparent;cursor:pointer;color:var(--text3);border-radius:4px;line-height:1;transition:all .15s}
+.bicon:hover{color:#dc2626;background:var(--neg-bg)}
+.bicon.ed:hover{color:#2563eb;background:#dbeafe}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.5rem}
+.scard{background:var(--card);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px 14px}
+.scard label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);display:block;margin-bottom:6px}
+.scard input{width:100%;font-family:'DM Mono',monospace;font-size:16px;font-weight:500;background:transparent;border:none;outline:none;color:var(--text)}
+.scard .val{font-family:'DM Mono',monospace;font-size:16px;font-weight:500}
+.twrap{background:var(--card);border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:880px}
+th{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--text2);background:var(--bg2);padding:8px 10px;text-align:left;border-bottom:0.5px solid var(--border);white-space:nowrap}
+th.r{text-align:right}
+td{padding:6px 10px;border-bottom:0.5px solid var(--border);vertical-align:middle;overflow:hidden}
+tr:last-child td{border-bottom:none}
+.ctr td{background:var(--cat-bg);color:var(--cat-text);font-size:11px;font-weight:500;padding:7px 12px;border-bottom:0.5px solid var(--cat-border)}
+.ci{display:flex;align-items:center;gap:8px}
+.cbtn{padding:3px 5px;border:none;background:transparent;cursor:pointer;color:var(--cat-pct);border-radius:4px;line-height:1;transition:all .15s}
+.cbtn:hover{color:#fff;background:rgba(255,255,255,.15)}
+.atr:hover td{background:var(--bg2)}
+td input{font-family:'DM Sans',sans-serif;font-size:12px;background:transparent;border:none;outline:none;color:var(--text);width:100%}
+td input:focus{background:var(--bg2);border-radius:4px;padding:0 4px}
+td input.mn{font-family:'DM Mono',monospace;font-size:12px;text-align:right}
+.badge{font-family:'DM Mono',monospace;font-size:11px;font-weight:500;padding:2px 7px;border-radius:4px;display:inline-block;min-width:54px;text-align:center;white-space:nowrap}
+.pos{background:var(--pos-bg);color:var(--pos-txt)}
+.neg{background:var(--neg-bg);color:var(--neg-txt)}
+.zero{color:var(--text2)}
+.tkr{font-family:'DM Mono',monospace;font-size:10px;background:var(--bg2);border:0.5px solid var(--border);border-radius:4px;padding:2px 6px;color:var(--text2);white-space:nowrap}
+.live-ok{font-size:9px;color:#22c55e;margin-left:3px}
+.live-fail{font-size:9px;color:#f59e0b;margin-left:3px}
+.erow td{text-align:center;padding:12px;font-size:11px;color:var(--text3);font-style:italic}
+.prog-wrap{background:var(--bg2);border-radius:var(--radius);padding:10px 16px;margin-bottom:1rem;display:none}
+.prog-wrap.on{display:block}
+.prog-txt{font-size:11px;color:var(--text2);margin-bottom:6px}
+.prog-bar-bg{background:var(--bg3);border-radius:4px;height:5px;overflow:hidden}
+.prog-bar{background:#22c55e;height:100%;border-radius:4px;transition:width .25s;width:0%}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;padding:60px 12px 20px;z-index:200;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--card);border:0.5px solid var(--border2);border-radius:var(--radius);padding:1.5rem;width:100%;max-width:400px;margin:auto}
+.modal h3{font-size:15px;font-weight:500;margin-bottom:1.25rem;display:flex;align-items:center;gap:8px}
+.fld{margin-bottom:.875rem}
+.fld label{font-size:11px;color:var(--text2);display:block;margin-bottom:4px;font-weight:500}
+.fld input,.fld select,.fld textarea{width:100%;font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 11px;border:0.5px solid var(--border2);border-radius:var(--rsm);background:var(--bg2);color:var(--text);outline:none;transition:border-color .15s}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:#3b82f6;background:var(--card)}
+.fld textarea{resize:vertical;min-height:80px;font-size:12px;font-family:'DM Mono',monospace}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mact{display:flex;gap:8px;justify-content:flex-end;margin-top:1.25rem;padding-top:1rem;border-top:0.5px solid var(--border)}
+.prow{display:flex;align-items:center;gap:10px;padding:7px 12px;border-bottom:0.5px solid var(--border)}
+.prow:last-child{border-bottom:none}
+.prow input{width:88px;font-family:'DM Mono',monospace;font-size:12px;padding:5px 8px;border:0.5px solid var(--border2);border-radius:var(--rsm);background:var(--bg2);color:var(--text);text-align:right;outline:none;flex-shrink:0}
+.prow input:focus{border-color:#3b82f6}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:#1a1a1a;color:#fff;font-size:12px;padding:10px 18px;border-radius:20px;z-index:999;transition:transform .3s,opacity .3s;opacity:0;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+@media(prefers-color-scheme:dark){.toast{background:#e0e0e0;color:#111}}
+.spin{display:inline-block;animation:spin .8s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(max-width:600px){.app{padding:1rem .75rem 4rem}.summary{grid-template-columns:1fr 1fr}.hright .btn span{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="header">
+  <div class="header-left">
+    <h1>📊 Mon Portefeuille</h1>
+    <p><span class="sdot" id="sdot"></span><span id="ts">Chargement…</span></p>
+  </div>
+  <div class="hright">
+    <button class="btn prim" onclick="openAdd()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Ajouter</span></button>
+    <button class="btn" onclick="openCat()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span>Catégorie</span></button>
+    <button class="btn" onclick="openPrices()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.49"/></svg><span>Prix manuels</span></button>
+  </div>
+</div>
+
+<div class="banner green">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="flex-shrink:0;opacity:.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  <div class="bt">
+    <div class="bt-title">Actualisation automatique des prix</div>
+    <div class="bt-sub" id="refresh-sub">Prix jamais actualisés — cliquez pour récupérer les cours en temps réel</div>
+  </div>
+  <div class="bbtns">
+    <button class="btn wh" id="btn-refresh" onclick="refreshAll()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.49"/></svg>Actualiser les prix</button>
+  </div>
+</div>
+
+<div class="prog-wrap" id="prog-wrap">
+  <div class="prog-txt" id="prog-txt">Récupération des cours…</div>
+  <div class="prog-bar-bg"><div class="prog-bar" id="prog-bar"></div></div>
+</div>
+
+<div class="banner blue">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="flex-shrink:0;opacity:.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+  <div class="bt"><div class="bt-title">Sync PC ↔ Android</div><div class="bt-sub">Exportez vos données sur un appareil, importez-les sur l'autre</div></div>
+  <div class="bbtns">
+    <button class="btn wh" onclick="exportJSON()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exporter</button>
+    <button class="btn wh" onclick="openImport()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 5 17 10"/><line x1="12" y1="5" x2="12" y2="17"/></svg>Importer</button>
+  </div>
+</div>
+
+<div class="summary">
+  <div class="scard"><label>Portefeuille total ($)</label><input type="number" id="i-total" value="29198" oninput="recalc()"></div>
+  <div class="scard"><label>Valeur investie</label><div class="val" id="o-inv">—</div></div>
+  <div class="scard"><label>Cash disponible</label><div class="val" id="o-cash">—</div></div>
+  <div class="scard"><label>PNL global</label><div class="val" id="o-pnl">—</div></div>
+</div>
+
+<div class="twrap">
+<table>
+<colgroup>
+  <col style="width:24px"><col style="width:17%"><col style="width:58px"><col style="width:13%">
+  <col style="width:60px"><col style="width:68px"><col style="width:74px"><col style="width:68px">
+  <col style="width:66px"><col style="width:60px"><col style="width:48px"><col><col style="width:62px">
+</colgroup>
+<thead><tr>
+  <th>#</th><th>Nom</th><th>Ticker</th><th>Narratif</th>
+  <th class="r">Qté</th><th class="r">Px achat</th><th class="r">Px actuel</th>
+  <th class="r">Valeur</th><th class="r">PNL $</th><th class="r">PNL %</th>
+  <th class="r">% ptf</th><th>Note</th><th class="r">Actions</th>
+</tr></thead>
+<tbody id="tb"></tbody>
+</table>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- MODALS -->
+<div class="overlay" id="m-add"><div class="modal">
+  <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Ajouter une ligne</h3>
+  <div class="fld"><label>Catégorie</label><select id="f-cat"></select></div>
+  <div class="fld"><label>Nom complet</label><input id="f-name" placeholder="ex : Tesla Inc."></div>
+  <div class="row2"><div class="fld"><label>Ticker Yahoo</label><input id="f-ticker" placeholder="TSLA"></div><div class="fld"><label>Narratif</label><input id="f-narr" placeholder="ex : IA & cloud"></div></div>
+  <div class="row2"><div class="fld"><label>Quantité</label><input id="f-qty" type="number" inputmode="decimal" placeholder="0"></div><div class="fld"><label>Prix d'achat ($)</label><input id="f-buy" type="number" inputmode="decimal" placeholder="0.00"></div></div>
+  <div class="row2"><div class="fld"><label>Prix actuel ($)</label><input id="f-cur" type="number" inputmode="decimal" placeholder="0.00"></div><div class="fld"><label>Note</label><input id="f-note" placeholder="optionnel"></div></div>
+  <div class="mact"><button class="btn" onclick="closeM('m-add')">Annuler</button><button class="btn prim" onclick="addAsset()">Ajouter</button></div>
+</div></div>
+
+<div class="overlay" id="m-cat"><div class="modal">
+  <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Nouvelle catégorie</h3>
+  <div class="fld"><label>Nom</label><input id="fc-name" placeholder="ex : Énergie & SMR"></div>
+  <div class="fld"><label>% cible</label><input id="fc-pct" type="number" inputmode="decimal" placeholder="ex : 10"></div>
+  <div class="mact"><button class="btn" onclick="closeM('m-cat')">Annuler</button><button class="btn prim" onclick="addCat()">Créer</button></div>
+</div></div>
+
+<div class="overlay" id="m-prices"><div class="modal" style="max-width:460px">
+  <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.49"/></svg>Prix manuels</h3>
+  <p style="font-size:11px;color:var(--text2);margin-bottom:.875rem">Modifiez ici les prix qui n'ont pas pu être récupérés automatiquement.</p>
+  <div style="border:0.5px solid var(--border);border-radius:var(--rsm);overflow:hidden;max-height:380px;overflow-y:auto" id="prices-list"></div>
+  <div class="mact"><button class="btn" onclick="closeM('m-prices')">Fermer</button><button class="btn prim" onclick="savePrices()">Enregistrer</button></div>
+</div></div>
+
+<div class="overlay" id="m-edit"><div class="modal">
+  <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Modifier la ligne</h3>
+  <input type="hidden" id="e-id">
+  <div class="fld"><label>Catégorie</label><select id="e-cat"></select></div>
+  <div class="fld"><label>Nom</label><input id="e-name"></div>
+  <div class="row2"><div class="fld"><label>Ticker Yahoo</label><input id="e-ticker"></div><div class="fld"><label>Narratif</label><input id="e-narr"></div></div>
+  <div class="row2"><div class="fld"><label>Quantité</label><input id="e-qty" type="number" inputmode="decimal"></div><div class="fld"><label>Prix d'achat ($)</label><input id="e-buy" type="number" inputmode="decimal"></div></div>
+  <div class="row2"><div class="fld"><label>Prix actuel ($)</label><input id="e-cur" type="number" inputmode="decimal"></div><div class="fld"><label>Note</label><input id="e-note"></div></div>
+  <div class="mact"><button class="btn" onclick="closeM('m-edit')">Annuler</button><button class="btn prim" onclick="saveEdit()">Enregistrer</button></div>
+</div></div>
+
+<div class="overlay" id="m-ecat"><div class="modal">
+  <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Modifier la catégorie</h3>
+  <input type="hidden" id="ec-id">
+  <div class="fld"><label>Nom</label><input id="ec-name"></div>
+  <div class="fld"><label>% cible</label><input id="ec-pct" type="number" inputmode="decimal"></div>
+  <div class="mact"><button class="btn" onclick="closeM('m-ecat')">Annuler</button><button class="btn prim" onclick="saveEditCat()">Enregistrer</button></div>
+</div></div>
+
+<div class="overlay" id="m-import"><div class="modal">
+  <h3><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 5 17 10"/><line x1="12" y1="5" x2="12" y2="17"/></svg>Importer des données</h3>
+  <p style="font-size:12px;color:var(--text2);margin-bottom:1rem">Collez le JSON exporté depuis l'autre appareil :</p>
+  <div class="fld"><textarea id="import-txt" placeholder='{"total":29198,"cats":[...],"assets":[]}'></textarea></div>
+  <p style="font-size:11px;color:#dc2626;margin-top:-.5rem;margin-bottom:.5rem">⚠️ Remplace toutes vos données actuelles.</p>
+  <div class="mact"><button class="btn" onclick="closeM('m-import')">Annuler</button><button class="btn prim" onclick="doImport()">Importer</button></div>
+</div></div>
+
+<script>
+const SK = 'portfolio_v4';
+
+// Corrections tickers Yahoo Finance
+const TMAP = {
+  'TEM.US': 'TEM',
+  'GLXY':   'GLXY.TO'
+};
+
+const DEFAULT_DATA = {"total":29198,"ncid":9,"nid":32,"cats":[{"id":1,"name":"Robotique humanoïde, voitures autonomes & batteries","tgt":20},{"id":2,"name":"Spatial & connectivité orbitale","tgt":15},{"id":3,"name":"Actions reliées aux cryptos","tgt":25},{"id":4,"name":"Métaux & ressources stratégiques","tgt":10},{"id":5,"name":"Énergie nucléaire & SMR","tgt":10},{"id":6,"name":"Intelligence artificielle & cloud","tgt":14},{"id":7,"name":"Technologies quantique","tgt":3},{"id":8,"name":"Medecine IA","tgt":3}],"assets":[{"id":1,"cid":1,"n":"ARK Autonomus Tech & Robotics ETF","t":"ARKQ","narr":"Robots & Tech ETF","qty":10.7822,"bp":134.48,"cp":138.4,"note":""},{"id":2,"cid":1,"n":"Tesla","t":"TSLA","narr":"Voitures autonomes","qty":4.7,"bp":265.5,"cp":419.23,"note":""},{"id":3,"cid":1,"n":"Xpeng","t":"XPEV","narr":"Robotique humanoïde","qty":51.384,"bp":19.4597,"cp":17.53,"note":""},{"id":4,"cid":6,"n":"Eos Energy Enterprises","t":"EOSE","narr":"Stockage énergie IA","qty":82.893,"bp":8.454,"cp":8.38,"note":"Achat 11 et 26 mai 2026"},{"id":5,"cid":2,"n":"Redwire","t":"RDW","narr":"Infrastructure spatiale","qty":66.763,"bp":9.7359,"cp":18.64,"note":""},{"id":6,"cid":2,"n":"Intuitive Machines","t":"LUNR","narr":"Infrastructure lunaire","qty":20.9,"bp":23.91,"cp":34.02,"note":""},{"id":7,"cid":3,"n":"Amplify Blockchain Technology ETF","t":"BLOK","narr":"ETF mineur infra crypto (blockchain)","qty":9.697,"bp":67.02,"cp":66.16,"note":""},{"id":8,"cid":3,"n":"Coinbase","t":"COIN","narr":"Exchange crypto USA","qty":5.71673,"bp":192.4,"cp":165.3,"note":""},{"id":9,"cid":3,"n":"Robinhood","t":"HOOD","narr":"Courtier actions/cryptos","qty":12.915,"bp":81.299,"cp":83.83,"note":""},{"id":10,"cid":3,"n":"Galaxy Digital","t":"GLXY","narr":"Data center & crypto","qty":29.782,"bp":26.86,"cp":29.7,"note":""},{"id":11,"cid":4,"n":"VanEck Rare Earth ETF","t":"REMX","narr":"Terres rares ETF","qty":7.74,"bp":96.8,"cp":98.31,"note":"Achat 27 mai 2026"},{"id":12,"cid":4,"n":"Copper miners ETF","t":"COPX","narr":"Minières de cuivre","qty":11.51,"bp":86.45,"cp":90.49,"note":""},{"id":17,"cid":5,"n":"Global X Uranium ETF","t":"URA","narr":"Leaders uranium & SMR","qty":27.514,"bp":52.698,"cp":50.45,"note":""},{"id":18,"cid":5,"n":"Energy Fuels Inc.","t":"UUUU","narr":"Uranium & terres rares","qty":50.09,"bp":19.92,"cp":18.14,"note":""},{"id":19,"cid":5,"n":"NuScale Power","t":"SMR","narr":"Small Modular Reactor","qty":90.04,"bp":14.8,"cp":12.28,"note":""},{"id":20,"cid":6,"n":"CoreWeave","t":"CRWV","narr":"Cloud IA spécialisé","qty":4.976,"bp":100.47,"cp":109.75,"note":""},{"id":21,"cid":6,"n":"ServiceNow","t":"NOW","narr":"Agents IA entreprise","qty":7.85,"bp":101.86,"cp":116.29,"note":""},{"id":22,"cid":1,"n":"Ambarella Inc","t":"AMBA","narr":"Capteur/cerveau vision robot et drone","qty":6.41,"bp":78,"cp":72.22,"note":""},{"id":23,"cid":1,"n":"Allegro MicroSystems, Inc","t":"ALGM","narr":"Capteur magnétique voitures,robots et data center","qty":9.545,"bp":52.38,"cp":52.44,"note":""},{"id":24,"cid":5,"n":"Oklo Inc","t":"OKLO","narr":"développement de réacteurs à fission / centrale nucleaire","qty":15.02,"bp":83.19,"cp":65.52,"note":""},{"id":25,"cid":1,"n":"Ses Ai Corp","t":"SES","narr":"batterie/drone/IA / stokage","qty":843.9,"bp":1.457,"cp":1.32,"note":""},{"id":26,"cid":3,"n":"Stratégy Inc","t":"MSTR","narr":"BTC","qty":6.965,"bp":49.87,"cp":126,"note":""},{"id":27,"cid":7,"n":"International Business Machines Corporation","t":"IBM","narr":"Informatique quantique, financement USA","qty":1.795,"bp":278.51,"cp":298,"note":""},{"id":28,"cid":1,"n":"Archer Aviation Inc","t":"ACHR","narr":"voiture volante/IA","qty":121.5,"bp":7.818,"cp":6.53,"note":""},{"id":29,"cid":2,"n":"ARK Space & Innovation ETF","t":"ARKX","narr":"innovation spatial/orbital","qty":18.5,"bp":35.127,"cp":35.84,"note":""},{"id":30,"cid":8,"n":"Tempus Ai Inc","t":"TEM.US","narr":"IA medecine","qty":12.426,"bp":60.35,"cp":47.1,"note":""},{"id":31,"cid":8,"n":"CRISPR Therapeutics AG","t":"CRSP","narr":"IA medecine genetique","qty":7.287,"bp":54.89,"cp":52.08,"note":""}]};
+
+// ── STORAGE ──────────────────────────────────────────────────────────────────
+let S = (function(){
+  try { const r = localStorage.getItem(SK); if(r) return JSON.parse(r); } catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_DATA));
+})();
+
+let saveTimer = null;
+function save(){
+  const d = document.getElementById('sdot');
+  if(d) d.classList.add('saving');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){
+    try { localStorage.setItem(SK, JSON.stringify(S)); } catch(e){}
+    if(d) d.classList.remove('saving');
+  }, 600);
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function toast(msg, ms){
+  ms = ms || 2800;
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, ms);
+}
+
+// ── PRIX AUTOMATIQUES ────────────────────────────────────────────────────────
+async function fetchOnePrice(ticker){
+  var yt = TMAP[ticker] || ticker;
+  var proxies = [
+    'https://corsproxy.io/?',
+    'https://api.allorigins.win/raw?url='
+  ];
+  var endpoints = [
+    'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(yt) + '?interval=1d&range=1d',
+    'https://query2.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(yt) + '?interval=1d&range=1d',
+    'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' + encodeURIComponent(yt)
+  ];
+  for(var pi = 0; pi < proxies.length; pi++){
+    for(var ei = 0; ei < endpoints.length; ei++){
+      try {
+        var url = proxies[pi] + encodeURIComponent(endpoints[ei]);
+        var ctrl = new AbortController();
+        var tid = setTimeout(function(){ ctrl.abort(); }, 10000);
+        var res = await fetch(url, { signal: ctrl.signal });
+        clearTimeout(tid);
+        if(!res.ok) continue;
+        var data = await res.json();
+        var p = (data && data.chart && data.chart.result && data.chart.result[0] && data.chart.result[0].meta && data.chart.result[0].meta.regularMarketPrice)
+              || (data && data.quoteResponse && data.quoteResponse.result && data.quoteResponse.result[0] && data.quoteResponse.result[0].regularMarketPrice);
+        if(p && !isNaN(p)){
+          var price = Math.round(p * 100) / 100;
+          // CAD->USD pour Toronto
+          if(yt.endsWith('.TO')){
+            var rate = await fetchCADUSD(proxies[pi]);
+            if(rate) return Math.round(price * rate * 100) / 100;
+          }
+          return price;
+        }
+      } catch(e){ continue; }
+    }
+  }
+  return null;
+}
+
+async function fetchCADUSD(proxy){
+  try {
+    var url = proxy + encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/CADUSD=X?interval=1d&range=1d');
+    var res = await fetch(url, { signal: AbortSignal.timeout(6000) });
+    if(!res.ok) return null;
+    var d = await res.json();
+    return d && d.chart && d.chart.result && d.chart.result[0] && d.chart.result[0].meta && d.chart.result[0].meta.regularMarketPrice || null;
+  } catch(e){ return null; }
+}
+
+async function refreshAll(){
+  var btn = document.getElementById('btn-refresh');
+  var prog = document.getElementById('prog-wrap');
+  var bar = document.getElementById('prog-bar');
+  var ptxt = document.getElementById('prog-txt');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.49"/></svg></span> En cours…';
+  prog.classList.add('on');
+  bar.style.width = '0%';
+  var total = S.assets.length, done = 0, ok = 0, failed = [];
+  for(var i = 0; i < S.assets.length; i++){
+    var a = S.assets[i];
+    ptxt.textContent = 'Récupération : ' + a.t + ' (' + (done+1) + '/' + total + ')…';
+    var price = await fetchOnePrice(a.t);
+    if(price !== null){ a.cp = price; a._liveOk = true; ok++; }
+    else { a._liveOk = false; failed.push(a.t); }
+    done++;
+    bar.style.width = Math.round(done/total*100) + '%';
+  }
+  prog.classList.remove('on');
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.49-5.49"/></svg> Actualiser les prix';
+  var now = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  S.lastRefresh = now;
+  document.getElementById('refresh-sub').textContent = 'Dernière actualisation : ' + now + ' — ' + ok + '/' + total + ' prix récupérés' + (failed.length ? ' ⚠ Manuel : ' + failed.join(', ') : ' ✅');
+  recalc();
+  toast(failed.length ? '⚠ ' + ok + '/' + total + ' prix mis à jour. Manuel : ' + failed.join(', ') : '✅ Tous les prix mis à jour (' + ok + ' actions) !', 4000);
+}
+
+// ── CALCULS ───────────────────────────────────────────────────────────────────
+function fm(v, d){ d = d===undefined?2:d; if(v==null||isNaN(v)) return '—'; return new Intl.NumberFormat('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d}).format(v); }
+function fc(v){ if(v==null||isNaN(v)) return '—'; return '$'+fm(Math.abs(v),0); }
+
+function recalc(){
+  var tot = parseFloat(document.getElementById('i-total').value) || 0;
+  S.total = tot;
+  var inv = 0, bv = 0;
+  S.assets.forEach(function(a){
+    var q = parseFloat(a.qty)||0, b = parseFloat(a.bp)||0, c = parseFloat(a.cp)||b;
+    a._cv = q*c; a._bv = q*b; inv += a._cv; bv += a._bv;
+  });
+  var cash = tot-inv, pnl = inv-bv, pp = bv>0?(pnl/bv*100):0;
+  document.getElementById('o-inv').textContent = fc(inv);
+  document.getElementById('o-cash').textContent = fc(cash);
+  var pel = document.getElementById('o-pnl');
+  if(pnl>0.01){ pel.textContent = '+$'+fm(pnl,0)+' (+'+fm(pp,1)+'%)'; pel.style.color='#059669'; }
+  else if(pnl<-0.01){ pel.textContent = '-$'+fm(Math.abs(pnl),0)+' ('+fm(pp,1)+'%)'; pel.style.color='#dc2626'; }
+  else { pel.textContent = '—'; pel.style.color=''; }
+  var now = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('ts').textContent = 'Sauvegardé à ' + now;
+  if(S.lastRefresh) document.getElementById('refresh-sub').textContent = 'Dernière actualisation : ' + S.lastRefresh;
+  save();
+  render(tot);
+}
+
+// ── RENDU ─────────────────────────────────────────────────────────────────────
+function eSvg(){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'; }
+function dSvg(){ return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>'; }
+
+function render(tot){
+  var tb = document.getElementById('tb');
+  tb.innerHTML = '';
+  S.cats.forEach(function(cat){
+    var rows = S.assets.filter(function(a){ return a.cid===cat.id; });
+    var cv = rows.reduce(function(s,a){ return s+(a._cv||0); },0);
+    var pct = tot>0?(cv/tot*100):0;
+    var ctr = document.createElement('tr'); ctr.className='ctr';
+    ctr.innerHTML = '<td colspan="11" style="padding:7px 12px"><span class="ci">'
+      +'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="opacity:.6;flex-shrink:0"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>'
+      +'<span>'+cat.name+'</span>'
+      +(cat.tgt?'<span style="opacity:.4;font-weight:400;font-size:10px;white-space:nowrap">cible '+cat.tgt+'%</span>':'')
+      +'<span style="margin-left:auto;font-family:\'DM Mono\',monospace;font-size:11px;color:var(--cat-pct);white-space:nowrap">'+fm(pct,1)+'%</span>'
+      +'</span></td>'
+      +'<td style="background:var(--cat-bg);border-bottom:0.5px solid var(--cat-border);text-align:right;white-space:nowrap;padding:4px 8px">'
+      +'<button class="cbtn" onclick="openEditCat('+cat.id+')">'+eSvg()+'</button>'
+      +'<button class="cbtn" onclick="delCat('+cat.id+')" style="margin-left:2px">'+dSvg()+'</button>'
+      +'</td><td style="background:var(--cat-bg);border-bottom:0.5px solid var(--cat-border);padding:0"></td>';
+    tb.appendChild(ctr);
+    if(!rows.length){
+      var er = document.createElement('tr'); er.className='erow';
+      er.innerHTML = '<td colspan="13">Aucune ligne — cliquez "Ajouter"</td>';
+      tb.appendChild(er);
+    }
+    rows.forEach(function(a, i){
+      var q=parseFloat(a.qty)||0, b=parseFloat(a.bp)||0, c=parseFloat(a.cp)||b;
+      var cv2=a._cv||0, bv2=a._bv||0;
+      var pp=bv2>0?((cv2-bv2)/bv2*100):0;
+      var pdlr=cv2-bv2, ptf=tot>0?(cv2/tot*100):0;
+      var ph='<span class="badge zero">—</span>';
+      if(q>0&&b>0){
+        if(pp>0.05) ph='<span class="badge pos">+'+fm(pp,1)+'%</span>';
+        else if(pp<-0.05) ph='<span class="badge neg">'+fm(pp,1)+'%</span>';
+        else ph='<span class="badge zero">0.0%</span>';
+      }
+      var pd='—';
+      if(q>0&&b>0){
+        if(pdlr>0.5) pd='<span style="color:#059669;font-family:\'DM Mono\',monospace;font-size:12px">+$'+fm(pdlr,0)+'</span>';
+        else if(pdlr<-0.5) pd='<span style="color:#dc2626;font-family:\'DM Mono\',monospace;font-size:12px">-$'+fm(Math.abs(pdlr),0)+'</span>';
+        else pd='<span style="color:var(--text2);font-family:\'DM Mono\',monospace;font-size:12px">$0</span>';
+      }
+      var liveTag = a._liveOk===true ? '<span class="live-ok" title="Prix auto">●</span>'
+                  : a._liveOk===false ? '<span class="live-fail" title="Prix manuel">⚠</span>' : '';
+      var tr = document.createElement('tr'); tr.className='atr';
+      tr.innerHTML = '<td style="text-align:center;font-size:11px;color:var(--text3)">'+(i+1)+'</td>'
+        +'<td style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="'+a.n+'">'+a.n+'</td>'
+        +'<td><span class="tkr">'+(a.t||'—')+'</span>'+liveTag+'</td>'
+        +'<td style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(a.narr||'')+'</td>'
+        +'<td><input type="number" class="mn" value="'+(q||'')+'" placeholder="0" inputmode="decimal" oninput="ua('+a.id+',\'qty\',this.value)"></td>'
+        +'<td><input type="number" class="mn" value="'+(b||'')+'" placeholder="0" inputmode="decimal" oninput="ua('+a.id+',\'bp\',this.value)"></td>'
+        +'<td style="text-align:right;font-family:\'DM Mono\',monospace;font-size:12px">'+(c||'—')+'</td>'
+        +'<td style="text-align:right;font-family:\'DM Mono\',monospace;font-size:12px">'+(q>0?fc(cv2):'—')+'</td>'
+        +'<td style="text-align:right">'+pd+'</td>'
+        +'<td style="text-align:right">'+ph+'</td>'
+        +'<td style="text-align:right;font-family:\'DM Mono\',monospace;font-size:12px;color:var(--text2)">'+(q>0&&tot>0?fm(ptf,1)+'%':'—')+'</td>'
+        +'<td style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(a.note||'')+'</td>'
+        +'<td style="text-align:right;white-space:nowrap">'
+        +'<button class="bicon ed" title="Modifier" onclick="openEdit('+a.id+')">'+eSvg()+'</button>'
+        +'<button class="bicon" title="Supprimer" onclick="delA('+a.id+')">'+dSvg()+'</button>'
+        +'</td>';
+      tb.appendChild(tr);
+    });
+  });
+}
+
+// ── CRUD ──────────────────────────────────────────────────────────────────────
+function ua(id,f,v){ var a=S.assets.find(function(x){return x.id===id;}); if(a){a[f]=parseFloat(v)||0;recalc();} }
+function delA(id){ if(!confirm('Supprimer cette ligne ?'))return; S.assets=S.assets.filter(function(x){return x.id!==id;}); recalc(); }
+function delCat(id){
+  var n=S.assets.filter(function(a){return a.cid===id;}).length;
+  if(n>0&&!confirm('Cette catégorie contient '+n+' ligne(s). Supprimer quand même ?'))return;
+  S.cats=S.cats.filter(function(c){return c.id!==id;}); S.assets=S.assets.filter(function(a){return a.cid!==id;}); recalc();
+}
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.overlay').forEach(function(el){ el.addEventListener('click',function(e){if(e.target===el)el.classList.remove('open');}); });
+function catOpts(sel,cid){ sel.innerHTML=S.cats.map(function(c){return '<option value="'+c.id+'"'+(c.id===cid?' selected':'')+'>'+c.name+'</option>';}).join(''); }
+
+function openAdd(){ catOpts(document.getElementById('f-cat')); ['f-name','f-ticker','f-narr','f-note'].forEach(function(i){document.getElementById(i).value=''}); ['f-qty','f-buy','f-cur'].forEach(function(i){document.getElementById(i).value=''}); openM('m-add'); setTimeout(function(){document.getElementById('f-name').focus();},100); }
+function addAsset(){
+  var nm=document.getElementById('f-name').value.trim(); if(!nm){document.getElementById('f-name').focus();return;}
+  S.assets.push({id:S.nid++,cid:parseInt(document.getElementById('f-cat').value),n:nm,t:document.getElementById('f-ticker').value.trim().toUpperCase(),narr:document.getElementById('f-narr').value.trim(),qty:parseFloat(document.getElementById('f-qty').value)||0,bp:parseFloat(document.getElementById('f-buy').value)||0,cp:parseFloat(document.getElementById('f-cur').value)||0,note:document.getElementById('f-note').value.trim()});
+  closeM('m-add'); recalc(); toast('✅ Ligne ajoutée !');
+}
+function openCat(){ document.getElementById('fc-name').value=''; document.getElementById('fc-pct').value=''; openM('m-cat'); setTimeout(function(){document.getElementById('fc-name').focus();},100); }
+function addCat(){ var nm=document.getElementById('fc-name').value.trim(); if(!nm)return; S.cats.push({id:S.ncid++,name:nm,tgt:parseFloat(document.getElementById('fc-pct').value)||null}); closeM('m-cat'); recalc(); toast('✅ Catégorie créée !'); }
+
+function openEdit(id){
+  var a=S.assets.find(function(x){return x.id===id;}); if(!a)return;
+  document.getElementById('e-id').value=id; catOpts(document.getElementById('e-cat'),a.cid);
+  document.getElementById('e-name').value=a.n; document.getElementById('e-ticker').value=a.t||''; document.getElementById('e-narr').value=a.narr||'';
+  document.getElementById('e-qty').value=a.qty||''; document.getElementById('e-buy').value=a.bp||''; document.getElementById('e-cur').value=a.cp||''; document.getElementById('e-note').value=a.note||'';
+  openM('m-edit');
+}
+function saveEdit(){
+  var id=parseInt(document.getElementById('e-id').value); var a=S.assets.find(function(x){return x.id===id;}); if(!a)return;
+  a.cid=parseInt(document.getElementById('e-cat').value); a.n=document.getElementById('e-name').value.trim()||a.n; a.t=document.getElementById('e-ticker').value.trim().toUpperCase();
+  a.narr=document.getElementById('e-narr').value.trim(); a.qty=parseFloat(document.getElementById('e-qty').value)||0; a.bp=parseFloat(document.getElementById('e-buy').value)||0;
+  a.cp=parseFloat(document.getElementById('e-cur').value)||0; a.note=document.getElementById('e-note').value.trim();
+  closeM('m-edit'); recalc(); toast('✅ Ligne mise à jour !');
+}
+function openEditCat(id){ var c=S.cats.find(function(x){return x.id===id;}); if(!c)return; document.getElementById('ec-id').value=id; document.getElementById('ec-name').value=c.name; document.getElementById('ec-pct').value=c.tgt||''; openM('m-ecat'); }
+function saveEditCat(){ var id=parseInt(document.getElementById('ec-id').value); var c=S.cats.find(function(x){return x.id===id;}); if(!c)return; c.name=document.getElementById('ec-name').value.trim()||c.name; c.tgt=parseFloat(document.getElementById('ec-pct').value)||null; closeM('m-ecat'); recalc(); toast('✅ Catégorie mise à jour !'); }
+
+function openPrices(){
+  var list=document.getElementById('prices-list');
+  list.innerHTML=S.assets.map(function(a){ return '<div class="prow"><span style="flex:1;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+a.n+'</span><span class="tkr" style="flex-shrink:0">'+(a.t||'—')+'</span><input id="pp-'+a.id+'" type="number" inputmode="decimal" value="'+(a.cp||'')+'" placeholder="0"></div>'; }).join('');
+  openM('m-prices');
+}
+function savePrices(){ S.assets.forEach(function(a){var el=document.getElementById('pp-'+a.id);if(el){var v=parseFloat(el.value);if(!isNaN(v)&&v>0)a.cp=v;}}); closeM('m-prices'); recalc(); toast('✅ Prix mis à jour !'); }
+
+function exportJSON(){
+  var data=JSON.stringify(S,null,2);
+  var blob=new Blob([data],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a'); a.href=url; a.download='portefeuille_'+new Date().toISOString().slice(0,10)+'.json'; a.click(); URL.revokeObjectURL(url);
+  toast('✅ Fichier exporté !');
+}
+function openImport(){ document.getElementById('import-txt').value=''; openM('m-import'); setTimeout(function(){document.getElementById('import-txt').focus();},100); }
+function doImport(){
+  try{
+    var raw=document.getElementById('import-txt').value.trim(); var d=JSON.parse(raw);
+    if(!d.cats||!d.assets)throw new Error('Format invalide');
+    S=d; save(); closeM('m-import'); document.getElementById('i-total').value=S.total||29198; recalc(); toast('✅ Données importées !');
+  }catch(e){ toast('❌ JSON invalide — vérifiez le contenu.',3500); }
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+document.getElementById('i-total').value = S.total || 29198;
+recalc();
+</script>
+</body>
+</html>
